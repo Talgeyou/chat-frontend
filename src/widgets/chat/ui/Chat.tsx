@@ -16,7 +16,9 @@ function Chat() {
   const [messages, setMessages] = useState<MessageWithUser[]>([]);
 
   const initializeSocket = useCallback(() => {
-    const socketClient: ChatSocket = io('http://localhost:5000/chat');
+    const socketClient: ChatSocket = io(
+      `${process.env.NEXT_PUBLIC_API_URL}chat`,
+    );
     socketClient.connect();
 
     socketClient.on('connect', () => {

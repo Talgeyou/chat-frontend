@@ -53,6 +53,10 @@ function ChatForm({ socket, onSubmit }: Props) {
         id: v4(),
       };
 
+      if (!message.body.trim()) {
+        return;
+      }
+
       socket?.emit('messages:post', message, message.id);
 
       messageRef.current.value = '';

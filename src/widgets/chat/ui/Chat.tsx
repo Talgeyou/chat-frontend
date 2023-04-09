@@ -94,8 +94,9 @@ function Chat() {
     switch (status) {
       case 'unauthenticated':
         return (
-          <div className="w-full h-full flex justify-center items-center">
-            <SignInButton />
+          <div className="w-full h-full flex justify-center items-center gap-4">
+            <SignInButton provider="github" />
+            <SignInButton provider="discord" />
           </div>
         );
       case 'authenticated':

@@ -33,7 +33,7 @@ function ChatContent({ messages }: Props) {
               i === messages.length - 1 && setLastMessageElement(element)
             }
             key={message.id}
-            className={clsx('flex flex-col gap-2', {
+            className={clsx('flex flex-col gap-2 overflow-hidden', {
               'items-end': data?.user.id === message.userId,
             })}
           >

@@ -25,7 +25,7 @@ function SignInButton() {
     setSigningIn(true);
 
     signIn('github').finally(() => setSigningIn(false));
-  }, []);
+  }, [isLoading]);
 
   return (
     <button

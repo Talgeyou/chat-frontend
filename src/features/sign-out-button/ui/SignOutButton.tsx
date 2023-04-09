@@ -25,7 +25,7 @@ function SignOutButton() {
     setSigningOut(true);
 
     signOut().finally(() => setSigningOut(false));
-  }, []);
+  }, [isLoading]);
 
   return (
     <button

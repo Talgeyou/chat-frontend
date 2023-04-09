@@ -1,5 +1,6 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { DateTime } from 'luxon';
 import { v4 } from 'uuid';
 import { Portal } from 'react-portal';
 import { GrEmoji } from 'react-icons/gr';
@@ -60,6 +61,7 @@ function ChatForm({ socket, onSubmit }: Props) {
         id: message.id,
         body: message.body,
         userId: data.user.id,
+        createdAt: new Date(),
         user: {
           id: data.user.id,
           email: data.user.email,

@@ -2,6 +2,7 @@ import React, { memo, useEffect, useRef, useState } from 'react';
 import { MessageWithUser } from '@/widgets/chat/types';
 import clsx from 'clsx';
 import { useSession } from 'next-auth/react';
+import { DateTime } from 'luxon';
 
 type Props = {
   messages: MessageWithUser[];
@@ -32,8 +33,19 @@ function ChatContent({ messages }: Props) {
               'items-end': data?.user.id === message.userId,
             })}
           >
-            <span className="block max-w 50vw bg-purple-100 p-2 rounded-lg max-w-[50%] break-words">
-              {message.body}
+            <span
+              className={clsx('flex max-w-[50%] items-center gap-2', {
+                'flex-row-reverse': message.userId === data?.user.id,
+              })}
+            >
+              <span className="bg-purple-100 p-2 rounded-lg  break-words">
+                {message.body}
+              </span>
+              <span className="text-xs text-neutral-400">
+                {DateTime.fromISO(
+                  message.createdAt.toISOString(),
+                ).toLocaleString(DateTime.DATETIME_SHORT)}
+              </span>
             </span>
             <span className="text-sm">{message.user.name}</span>
           </li>

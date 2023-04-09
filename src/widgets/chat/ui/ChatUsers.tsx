@@ -12,7 +12,6 @@ function ChatUsers({ socket }: Props) {
   const [users, setUsers] = useState<User[]>([]);
 
   const userConnectListenter = useCallback((user: User) => {
-    console.log({ user });
     setUsers((prev) => getSortedUsers([...prev, user]));
   }, []);
 

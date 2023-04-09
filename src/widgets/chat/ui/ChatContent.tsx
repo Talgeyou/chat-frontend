@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { MessageWithUser } from '@/widgets/chat/types';
 import clsx from 'clsx';
 import { useSession } from 'next-auth/react';
@@ -19,6 +19,10 @@ function ChatContent({ messages }: Props) {
       lastMessageElement.scrollIntoView();
     }
   }, [lastMessageElement]);
+
+  const getDateTime = useCallback((dateTime: string) => {
+    return DateTime.fromISO(dateTime).toLocaleString(DateTime.DATETIME_SHORT);
+  }, []);
 
   return (
     <div className="p-4 flex-1 w-full overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-purple-500">
@@ -42,9 +46,7 @@ function ChatContent({ messages }: Props) {
                 {message.body}
               </span>
               <span className="text-xs text-neutral-400 min-w-max">
-                {DateTime.fromISO(
-                  message.createdAt as unknown as string,
-                ).toLocaleString(DateTime.DATETIME_SHORT)}
+                {getDateTime(message.createdAt)}
               </span>
             </span>
             <span className="text-sm">{message.user.name}</span>

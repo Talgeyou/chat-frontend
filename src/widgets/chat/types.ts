@@ -1,7 +1,9 @@
 import { Message, User } from '@prisma/client';
 import { Socket } from 'socket.io-client';
 
-export type MessageWithUser = Message & { user: User };
+export type MessageWithUser = Omit<Message & { user: User }, 'createdAt'> & {
+  createdAt: string;
+};
 
 export type MessageCreateDTO = {
   userId: string;

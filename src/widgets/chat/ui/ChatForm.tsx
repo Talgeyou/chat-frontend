@@ -61,7 +61,7 @@ function ChatForm({ socket, onSubmit }: Props) {
         id: message.id,
         body: message.body,
         userId: data.user.id,
-        createdAt: new Date(),
+        createdAt: DateTime.now().toISO() as string,
         user: {
           id: data.user.id,
           email: data.user.email,
@@ -108,7 +108,6 @@ function ChatForm({ socket, onSubmit }: Props) {
   }, [changeEmojiPickerPosition]);
 
   useClickOutside(emojiPickerRef, () => {
-    console.log('clicked outside');
     setShowEmojiPicker(false);
   });
 

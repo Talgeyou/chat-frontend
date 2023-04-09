@@ -4,9 +4,9 @@ import clsx from 'clsx';
 import { RedirectableProviderType } from 'next-auth/providers';
 
 const defaultClassNames =
-  'bg-blue-500 text-white p-2 rounded-lg transition-colors';
+  'bg-purple-500 text-white p-2 rounded-lg transition-colors';
 
-const hoverClassNames = 'hover:cursor-pointer hover:bg-blue-400';
+const hoverClassNames = 'hover:cursor-pointer hover:bg-purple-400';
 
 const disabledClassNames =
   'disabled:bg-neutral-400 disabled:cursor-not-allowed disabled:text-black';

@@ -1,0 +1,1 @@
+export { getSortedUsers } from './getSortedUsers';

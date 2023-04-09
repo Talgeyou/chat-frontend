@@ -16,34 +16,36 @@ function Chat() {
   const [messages, setMessages] = useState<MessageWithUser[]>([]);
 
   const initializeSocket = useCallback(() => {
-    const socketClient: ChatSocket = io(
-      `${process.env.NEXT_PUBLIC_API_URL}chat`,
-    );
-    socketClient.connect();
+    if (data?.user.id) {
+      const socketClient: ChatSocket = io(
+        `${process.env.NEXT_PUBLIC_API_URL}chat`,
+        { query: { userId: data?.user.id } },
+      );
+      socketClient.connect();
 
-    socketClient.on('connect', () => {
-      setConnected(true);
-    });
+      socketClient.on('connect', () => {
+        setConnected(true);
+      });
 
-    socketClient.on('disconnect', () => {
-      setConnected(false);
-    });
-    return socketClient;
-  }, []);
+      socketClient.on('disconnect', () => {
+        setConnected(false);
+      });
+      return socketClient;
+    }
+  }, [data?.user.id]);
 
   useEffect(() => {
     const socketClient = initializeSocket();
     setSocket(socketClient);
 
     return () => {
-      socketClient.disconnect();
+      socketClient?.disconnect();
       setSocket(undefined);
     };
   }, [initializeSocket]);
 
   const newMessageListener = useCallback(
     (message: MessageWithUser, previousId: string) => {
-      console.log(message, previousId);
       setMessages((prev) => {
         let changedId = false;
 
@@ -86,6 +88,18 @@ function Chat() {
     };
   }, [newMessageErrorListener, socket]);
 
+  const getMessagesListener = useCallback((messages: MessageWithUser[]) => {
+    setMessages(messages);
+  }, []);
+
+  useEffect(() => {
+    socket?.on('messages:get', getMessagesListener);
+
+    return () => {
+      socket?.off('messages:get', getMessagesListener);
+    };
+  }, [getMessagesListener, socket]);
+
   const handleSubmit = useCallback((message: MessageWithUser) => {
     setMessages((prev) => [...prev, message]);
   }, []);
@@ -101,23 +115,29 @@ function Chat() {
         );
       case 'authenticated':
         return (
-          <div className="w-full">
-            <ChatHeader />
+          <div className="flex-1 h-full flex w-full overflow-hidden flex-col ">
             <ChatContent messages={messages} />
             <ChatForm socket={socket} onSubmit={handleSubmit} />
           </div>
         );
       case 'loading':
-        return <div>Loading...</div>;
+        return (
+          <div className="w-full h-full flex justify-center items-center">
+            Loading...
+          </div>
+        );
       default:
         return exhaustiveCheck(status);
     }
   }, [handleSubmit, messages, socket, status]);
 
   return (
-    <div className="bg-white max-w-xl w-full drop-shadow-lg shadow flex">
-      <ChatUsers />
-      {content}
+    <div className="h-[75vh] bg-white max-w-7xl w-full drop-shadow-lg shadow flex flex-col">
+      <ChatHeader />
+      <div className="flex-1 flex overflow-hidden">
+        <ChatUsers socket={socket} />
+        {content}
+      </div>
     </div>
   );
 }

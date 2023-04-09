@@ -69,11 +69,11 @@ function ChatForm({ socket, onSubmit }: Props) {
       onSubmit={handleSubmit}
     >
       <input
-        className="border-b border-neutral-500 w-full p-2 focus:outline-none focus:border-blue-500"
+        className="border-b border-neutral-500 w-full p-2 focus:outline-none focus:border-purple-500"
         ref={messageRef}
       />
       <button
-        className="min-w-[4rem] bg-blue-500 text-white p-2 rounded-lg focus-visible:bg-blue-400 hover:bg-blue-400 active:bg-blue-400"
+        className="min-w-[4rem] bg-purple-500 text-white p-2 rounded-lg focus-visible:bg-purple-400 hover:bg-purple-400 active:bg-purple-400"
         type="submit"
       >
         Send

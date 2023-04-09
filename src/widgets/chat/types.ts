@@ -13,6 +13,10 @@ export type ChatSocket = Socket<
   {
     'messages:post': (message: MessageWithUser, previousId: string) => void;
     'messages:post-error': (messageId: string) => void;
+    'messages:get': (messages: MessageWithUser[]) => void;
+    'users:connect': (user: User) => void;
+    'users:disconnect': (user: User) => void;
+    'users:get': (user: User[]) => void;
   },
   {
     'messages:post': (message: MessageCreateDTO, id: string) => void;

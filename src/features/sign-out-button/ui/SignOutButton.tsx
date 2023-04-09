@@ -8,9 +8,13 @@ const defaultClassNames =
 const hoverClassNames = 'hover:cursor-pointer hover:bg-red-400';
 
 const disabledClassNames =
-  'disabled:bg-neutral-400 disabled:cursor-not-allowed disabled:text-black';
+  'disabled:bg-neutral-400 disabled:cursor-not-allowed disabled:text-black disabled:hover:bg-neutral-400 disabled:hover:cursor-not-allowed';
 
-function SignOutButton() {
+type Props = {
+  disabled?: boolean;
+};
+
+function SignOutButton({ disabled }: Props) {
   const { status } = useSession();
 
   const [signingOut, setSigningOut] = useState(false);
@@ -18,20 +22,20 @@ function SignOutButton() {
   const isLoading = status === 'loading' || signingOut;
 
   const handleClick = useCallback(async () => {
-    if (isLoading) {
+    if (isLoading || disabled) {
       return;
     }
 
     setSigningOut(true);
 
     signOut().finally(() => setSigningOut(false));
-  }, [isLoading]);
+  }, [disabled, isLoading]);
 
   return (
     <button
       className={clsx(defaultClassNames, hoverClassNames, disabledClassNames)}
       onClick={handleClick}
-      disabled={isLoading}
+      disabled={isLoading || disabled}
     >
       Sign Out
     </button>

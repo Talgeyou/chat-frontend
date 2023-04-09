@@ -41,7 +41,7 @@ function ChatContent({ messages }: Props) {
               <span className="bg-purple-100 p-2 rounded-lg  break-words">
                 {message.body}
               </span>
-              <span className="text-xs text-neutral-400">
+              <span className="text-xs text-neutral-400 w-fit">
                 {DateTime.fromISO(
                   message.createdAt.toISOString(),
                 ).toLocaleString(DateTime.DATETIME_SHORT)}

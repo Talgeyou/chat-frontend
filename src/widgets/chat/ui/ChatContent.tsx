@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useRef, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { MessageWithUser } from '@/widgets/chat/types';
 import clsx from 'clsx';
 import { useSession } from 'next-auth/react';
@@ -38,12 +38,12 @@ function ChatContent({ messages }: Props) {
                 'flex-row-reverse': message.userId === data?.user.id,
               })}
             >
-              <span className="bg-purple-100 p-2 rounded-lg  break-words">
+              <span className="bg-purple-100 p-2 rounded-lg break-words">
                 {message.body}
               </span>
-              <span className="text-xs text-neutral-400 w-fit">
+              <span className="text-xs text-neutral-400 min-w-max">
                 {DateTime.fromISO(
-                  message.createdAt.toISOString(),
+                  message.createdAt as unknown as string,
                 ).toLocaleString(DateTime.DATETIME_SHORT)}
               </span>
             </span>

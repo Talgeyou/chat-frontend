@@ -1,7 +1,12 @@
-import React, { memo, useCallback, useRef } from 'react';
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { ChatSocket, MessageWithUser } from '@/widgets/chat/types';
 import { v4 } from 'uuid';
+import { Portal } from 'react-portal';
+import { GrEmoji } from 'react-icons/gr';
+import useResizeObserver from '@react-hook/resize-observer';
+import { ChatSocket, MessageWithUser } from '@/widgets/chat/types';
+import { useClickOutside } from '@/shared/hooks';
+import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
 
 type Props = {
   socket?: ChatSocket;
@@ -11,7 +16,19 @@ type Props = {
 function ChatForm({ socket, onSubmit }: Props) {
   const { data } = useSession();
 
+  const containerRef = useRef<HTMLFormElement>(null);
   const messageRef = useRef<HTMLInputElement>(null);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [emojiButtonElement, setEmojiButtonElement] =
+    useState<HTMLButtonElement | null>(null);
+  const emojiPickerRef = useRef<HTMLDivElement>(null);
+
+  const [emojiPickerPosition, setEmojiPickerPosition] = useState<{
+    top?: number;
+    right?: number;
+    bottom?: number;
+    left?: number;
+  }>({ bottom: 0 });
 
   const handleSubmit = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
@@ -63,22 +80,81 @@ function ChatForm({ socket, onSubmit }: Props) {
     ],
   );
 
+  const toggleEmojiPicker = useCallback(
+    (event: React.FormEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+      event.stopPropagation();
+      setShowEmojiPicker((prev) => !prev);
+    },
+    [],
+  );
+
+  const changeEmojiPickerPosition = useCallback(() => {
+    if (emojiButtonElement) {
+      const { x: buttonXPosition, y: buttonYPosition } =
+        emojiButtonElement.getBoundingClientRect();
+
+      setEmojiPickerPosition({
+        top: buttonYPosition - 450,
+        left: buttonXPosition - 435 / 2,
+      });
+    }
+  }, [emojiButtonElement]);
+
+  useEffect(() => {
+    changeEmojiPickerPosition();
+  }, [changeEmojiPickerPosition]);
+
+  useClickOutside(emojiPickerRef, () => {
+    console.log('clicked outside');
+    setShowEmojiPicker(false);
+  });
+
+  useResizeObserver(containerRef, () => changeEmojiPickerPosition());
+
+  const handleClickEmoji = useCallback((emoji: EmojiClickData) => {
+    if (messageRef.current) {
+      messageRef.current.value += emoji.emoji;
+    }
+  }, []);
+
   return (
-    <form
-      className="p-4 flex items-center justify-between gap-2 border-t border-neutral-500"
-      onSubmit={handleSubmit}
-    >
-      <input
-        className="border-b border-neutral-500 w-full p-2 focus:outline-none focus:border-purple-500"
-        ref={messageRef}
-      />
+    <div className="p-4 flex items-center justify-between gap-2 border-t border-neutral-500">
       <button
-        className="min-w-[4rem] bg-purple-500 text-white p-2 rounded-lg focus-visible:bg-purple-400 hover:bg-purple-400 active:bg-purple-400"
-        type="submit"
+        ref={(element) => setEmojiButtonElement(element)}
+        onClick={toggleEmojiPicker}
       >
-        Send
+        <GrEmoji size={32} className={'text-neutral-700'} />
       </button>
-    </form>
+      {showEmojiPicker && typeof window !== 'undefined' && (
+        <Portal>
+          <div
+            ref={emojiPickerRef}
+            className="absolute overflow-auto shadow-xl"
+            style={emojiPickerPosition}
+          >
+            <EmojiPicker onEmojiClick={handleClickEmoji} />
+          </div>
+        </Portal>
+      )}
+      <form
+        className="flex-1 w-full flex items-center justify-between gap-4"
+        ref={containerRef}
+        onSubmit={handleSubmit}
+      >
+        <input
+          className="border-b border-neutral-500 w-full p-2 focus:outline-none focus:border-purple-500"
+          ref={messageRef}
+        />
+
+        <button
+          className="min-w-[4rem] bg-purple-500 text-white p-2 rounded-lg focus-visible:bg-purple-400 hover:bg-purple-400 active:bg-purple-400"
+          type="submit"
+        >
+          Send
+        </button>
+      </form>
+    </div>
   );
 }
 

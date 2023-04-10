@@ -21,7 +21,7 @@ function ChatForm({ socket, onSubmit }: Props) {
   const { data } = useSession();
 
   const containerRef = useRef<HTMLFormElement>(null);
-  const messageRef = useRef<HTMLTextAreaElement>(null);
+  const messageRef = useRef<HTMLInputElement>(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [emojiButtonElement, setEmojiButtonElement] =
     useState<HTMLButtonElement | null>(null);
@@ -150,7 +150,7 @@ function ChatForm({ socket, onSubmit }: Props) {
         ref={containerRef}
         onSubmit={handleSubmit}
       >
-        <textarea
+        <input
           className="border-b flex-1 w-full border-neutral-500 p-2 focus:outline-none focus:border-purple-500"
           ref={messageRef}
         />

@@ -1,14 +1,15 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { useTranslation } from 'next-i18next';
 import { DateTime } from 'luxon';
 import { v4 } from 'uuid';
 import { Portal } from 'react-portal';
 import { GrEmoji } from 'react-icons/gr';
+import { AiOutlineSend } from 'react-icons/ai';
+import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
 import useResizeObserver from '@react-hook/resize-observer';
 import { ChatSocket, MessageWithUser } from '@/widgets/chat/types';
 import { useClickOutside } from '@/shared/hooks';
-import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
-import { useTranslation } from 'next-i18next';
 
 type Props = {
   socket?: ChatSocket;
@@ -20,7 +21,7 @@ function ChatForm({ socket, onSubmit }: Props) {
   const { data } = useSession();
 
   const containerRef = useRef<HTMLFormElement>(null);
-  const messageRef = useRef<HTMLInputElement>(null);
+  const messageRef = useRef<HTMLTextAreaElement>(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [emojiButtonElement, setEmojiButtonElement] =
     useState<HTMLButtonElement | null>(null);
@@ -126,7 +127,7 @@ function ChatForm({ socket, onSubmit }: Props) {
   }, []);
 
   return (
-    <div className="p-4 flex items-center justify-between gap-2 border-t border-neutral-500">
+    <div className="p-4 flex items-center justify-between gap-2 border-t border-neutral-500 w-full">
       <button
         ref={(element) => setEmojiButtonElement(element)}
         onClick={toggleEmojiPicker}
@@ -145,20 +146,20 @@ function ChatForm({ socket, onSubmit }: Props) {
         </Portal>
       )}
       <form
-        className="flex-1 w-full flex items-center justify-between gap-4"
+        className="flex-1 flex items-center justify-between gap-4 overflow-hidden"
         ref={containerRef}
         onSubmit={handleSubmit}
       >
-        <input
-          className="border-b border-neutral-500 flex-1 p-2 focus:outline-none focus:border-purple-500"
+        <textarea
+          className="border-b flex-1 w-full border-neutral-500 p-2 focus:outline-none focus:border-purple-500"
           ref={messageRef}
         />
-
         <button
-          className="min-w-[4rem] w-max bg-purple-500 text-white p-2 rounded-lg focus-visible:bg-purple-400 hover:bg-purple-400 active:bg-purple-400"
+          className="bg-purple-500 text-white p-2 rounded-lg focus-visible:bg-purple-400 hover:bg-purple-400 active:bg-purple-400 flex gap-2 items-center"
           type="submit"
         >
-          {t('send')}
+          <span className="hidden sm:block">{t('send')}</span>
+          <AiOutlineSend size={24} />
         </button>
       </form>
     </div>

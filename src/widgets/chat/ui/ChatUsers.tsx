@@ -48,10 +48,12 @@ function ChatUsers({ socket }: Props) {
   }, [socket, usersGetListener]);
 
   return (
-    <div className="basis-52 shrink-0 grow-0 border-r border-neutral-500 p-4 flex flex-col gap-2">
-      {users.map((user) => (
-        <ChatUserCard key={user.id} user={user} />
-      ))}
+    <div className="hidden sm:block basis-16 md:basis-52 shrink-0 grow-0 border-r border-neutral-500 p-4 overflow-hidden">
+      <div className="w-8 md:w-full overflow-hidden flex flex-col items-start gap-2">
+        {users.map((user) => (
+          <ChatUserCard key={user.id} user={user} />
+        ))}
+      </div>
     </div>
   );
 }

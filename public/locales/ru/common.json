@@ -1,5 +1,6 @@
 {
   "sign_in": "Войти через {{provider}}",
   "sign_out": "Выйти",
-  "send": "Отправить"
+  "send": "Отправить",
+  "new_message": "Новое сообщение от {{username}}: {{text}}"
 }

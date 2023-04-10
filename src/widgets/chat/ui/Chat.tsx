@@ -9,12 +9,18 @@ import ChatHeader from './ChatHeader';
 import ChatForm from './ChatForm';
 import ChatUsers from './ChatUsers';
 import ChatSkeleton from './ChatSkeleton';
+import useSound from 'use-sound';
+import { useNotifications } from '@/shared/hooks';
+import { useTranslation } from 'react-i18next';
 
 function Chat() {
+  const { t } = useTranslation(['common']);
   const { status, data } = useSession();
   const [connected, setConnected] = useState(false);
   const [socket, setSocket] = useState<ChatSocket>();
   const [messages, setMessages] = useState<MessageWithUser[]>([]);
+  const [playSound] = useSound('/sounds/message.wav');
+  const showNotification = useNotifications();
 
   const initializeSocket = useCallback(() => {
     if (data?.user.id) {
@@ -62,11 +68,18 @@ function Chat() {
         if (changedId) {
           return newMessages;
         } else {
+          playSound();
+          showNotification(
+            t('new_message', {
+              username: message.user.name,
+              text: message.body,
+            }),
+          );
           return [...newMessages, message];
         }
       });
     },
-    [],
+    [playSound, showNotification, t],
   );
 
   useEffect(() => {

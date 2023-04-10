@@ -1,5 +1,6 @@
 {
   "sign_in": "Sign in via {{provider}}",
   "sign_out": "Sign Out",
-  "send": "Send"
+  "send": "Send",
+  "new_message": "New Message from {{username}}: {{text}}"
 }

@@ -1,3 +1,5 @@
+import { GetServerSidePropsContext } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Chat from '@/widgets/chat';
 
 export default function Home() {
@@ -6,4 +8,14 @@ export default function Home() {
       <Chat />
     </main>
   );
+}
+
+export async function getServerSideProps({
+  locale,
+}: GetServerSidePropsContext) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? 'ru', ['common'])),
+    },
+  };
 }

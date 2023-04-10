@@ -8,6 +8,7 @@ import ChatContent from './ChatContent';
 import ChatHeader from './ChatHeader';
 import ChatForm from './ChatForm';
 import ChatUsers from './ChatUsers';
+import ChatSkeleton from './ChatSkeleton';
 
 function Chat() {
   const { status, data } = useSession();
@@ -108,24 +109,23 @@ function Chat() {
     switch (status) {
       case 'unauthenticated':
         return (
-          <div className="w-full h-full flex justify-center items-center gap-4">
+          <div className="w-full h-full flex flex-col justify-center items-center gap-4">
             <SignInButton provider="github" />
             <SignInButton provider="discord" />
           </div>
         );
       case 'authenticated':
         return (
-          <div className="flex-1 h-full flex w-full overflow-hidden flex-col ">
-            <ChatContent messages={messages} />
-            <ChatForm socket={socket} onSubmit={handleSubmit} />
+          <div className="flex-1 flex overflow-hidden">
+            <ChatUsers socket={socket} />
+            <div className="flex-1 h-full flex w-full overflow-hidden flex-col ">
+              <ChatContent messages={messages} />
+              <ChatForm socket={socket} onSubmit={handleSubmit} />
+            </div>
           </div>
         );
       case 'loading':
-        return (
-          <div className="w-full h-full flex justify-center items-center">
-            Loading...
-          </div>
-        );
+        return <ChatSkeleton />;
       default:
         return exhaustiveCheck(status);
     }
@@ -134,10 +134,7 @@ function Chat() {
   return (
     <div className="h-[75vh] bg-white max-w-7xl w-full drop-shadow-lg shadow flex flex-col">
       <ChatHeader />
-      <div className="flex-1 flex overflow-hidden">
-        <ChatUsers socket={socket} />
-        {content}
-      </div>
+      {content}
     </div>
   );
 }

@@ -8,6 +8,7 @@ import useResizeObserver from '@react-hook/resize-observer';
 import { ChatSocket, MessageWithUser } from '@/widgets/chat/types';
 import { useClickOutside } from '@/shared/hooks';
 import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
+import { useTranslation } from 'next-i18next';
 
 type Props = {
   socket?: ChatSocket;
@@ -15,6 +16,7 @@ type Props = {
 };
 
 function ChatForm({ socket, onSubmit }: Props) {
+  const { t } = useTranslation(['common']);
   const { data } = useSession();
 
   const containerRef = useRef<HTMLFormElement>(null);
@@ -148,15 +150,15 @@ function ChatForm({ socket, onSubmit }: Props) {
         onSubmit={handleSubmit}
       >
         <input
-          className="border-b border-neutral-500 w-full p-2 focus:outline-none focus:border-purple-500"
+          className="border-b border-neutral-500 flex-1 p-2 focus:outline-none focus:border-purple-500"
           ref={messageRef}
         />
 
         <button
-          className="min-w-[4rem] bg-purple-500 text-white p-2 rounded-lg focus-visible:bg-purple-400 hover:bg-purple-400 active:bg-purple-400"
+          className="min-w-[4rem] w-max bg-purple-500 text-white p-2 rounded-lg focus-visible:bg-purple-400 hover:bg-purple-400 active:bg-purple-400"
           type="submit"
         >
-          Send
+          {t('send')}
         </button>
       </form>
     </div>

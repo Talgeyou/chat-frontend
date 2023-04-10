@@ -1,6 +1,7 @@
 import React, { memo, useCallback, useState } from 'react';
 import { signOut, useSession } from 'next-auth/react';
 import clsx from 'clsx';
+import { useTranslation } from 'next-i18next';
 
 const defaultClassNames =
   'bg-red-500 text-white p-2 rounded-lg transition-colors';
@@ -15,6 +16,7 @@ type Props = {
 };
 
 function SignOutButton({ disabled }: Props) {
+  const { t } = useTranslation(['common']);
   const { status } = useSession();
 
   const [signingOut, setSigningOut] = useState(false);
@@ -37,7 +39,7 @@ function SignOutButton({ disabled }: Props) {
       onClick={handleClick}
       disabled={isLoading || disabled}
     >
-      Sign Out
+      {t('sign_out')}
     </button>
   );
 }

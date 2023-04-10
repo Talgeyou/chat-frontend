@@ -3,6 +3,8 @@ import { MessageWithUser } from '@/widgets/chat/types';
 import clsx from 'clsx';
 import { useSession } from 'next-auth/react';
 import { DateTime } from 'luxon';
+import Image from 'next/image';
+import { classNames } from '@/shared/lib';
 
 type Props = {
   messages: MessageWithUser[];
@@ -42,14 +44,29 @@ function ChatContent({ messages }: Props) {
                 'flex-row-reverse': message.userId === data?.user.id,
               })}
             >
-              <span className="bg-purple-100 p-2 rounded-lg break-words">
+              <div className="bg-purple-100 p-2 rounded-lg break-words whitespace-pre">
                 {message.body}
-              </span>
+              </div>
               <span className="text-xs text-neutral-400 min-w-max">
                 {getDateTime(message.createdAt)}
               </span>
             </span>
-            <span className="text-sm">{message.user.name}</span>
+            <div
+              className={classNames('flex gap-2', {
+                'flex-row-reverse': message.userId === data?.user.id,
+              })}
+            >
+              {message.user.image ? (
+                <Image
+                  className="rounded-full"
+                  src={message.user.image}
+                  alt={`${message.user.name} avatar`}
+                  width={20}
+                  height={20}
+                />
+              ) : null}
+              <span className="text-sm">{message.user.name}</span>
+            </div>
           </li>
         ))}
       </ul>

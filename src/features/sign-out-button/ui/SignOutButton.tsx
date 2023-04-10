@@ -1,15 +1,8 @@
 import React, { memo, useCallback, useState } from 'react';
 import { signOut, useSession } from 'next-auth/react';
-import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
-
-const defaultClassNames =
-  'bg-red-500 text-white p-2 rounded-lg transition-colors';
-
-const hoverClassNames = 'hover:cursor-pointer hover:bg-red-400';
-
-const disabledClassNames =
-  'disabled:bg-neutral-400 disabled:cursor-not-allowed disabled:text-black disabled:hover:bg-neutral-400 disabled:hover:cursor-not-allowed';
+import { IoLogOutOutline } from 'react-icons/io5';
+import Button from '@/shared/ui/button';
 
 type Props = {
   disabled?: boolean;
@@ -34,13 +27,15 @@ function SignOutButton({ disabled }: Props) {
   }, [disabled, isLoading]);
 
   return (
-    <button
-      className={clsx(defaultClassNames, hoverClassNames, disabledClassNames)}
+    <Button
       onClick={handleClick}
-      disabled={isLoading || disabled}
+      addonAfter={<IoLogOutOutline size={18} />}
+      disabled={disabled}
+      isLoading={isLoading}
+      variant={'danger'}
     >
       {t('sign_out')}
-    </button>
+    </Button>
   );
 }
 

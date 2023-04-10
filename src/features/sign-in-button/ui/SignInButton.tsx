@@ -4,14 +4,7 @@ import { useTranslation } from 'next-i18next';
 import clsx from 'clsx';
 import { FaDiscord, FaGithub } from 'react-icons/fa';
 import { IconType } from 'react-icons';
-
-const defaultClassNames =
-  'bg-purple-500 text-white p-2 rounded-lg transition-colors flex gap-2 items-center';
-
-const hoverClassNames = 'hover:cursor-pointer hover:bg-purple-400';
-
-const disabledClassNames =
-  'disabled:bg-neutral-400 disabled:cursor-not-allowed disabled:text-black';
+import Button from '@/shared/ui/button';
 
 type Provider = 'discord' | 'github';
 
@@ -44,20 +37,22 @@ function SignInButton({ provider }: Props) {
 
     setSigningIn(true);
 
-    signIn(provider).finally(() => setSigningIn(false));
+    await signIn(provider);
+
+    setSigningIn(false);
   }, [isLoading, provider]);
 
   const Icon = providerIcons[provider];
 
   return (
-    <button
-      className={clsx(defaultClassNames, hoverClassNames, disabledClassNames)}
+    <Button
+      isLoading={isLoading}
+      addonBefore={<Icon size={32} />}
+      size={'lg'}
       onClick={handleClick}
-      disabled={isLoading}
     >
-      {<Icon size={32} />}
       <span>{t('sign_in', { provider: providerNames[provider] })}</span>
-    </button>
+    </Button>
   );
 }
 

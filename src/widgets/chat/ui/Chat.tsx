@@ -53,6 +53,7 @@ function Chat() {
 
   const newMessageListener = useCallback(
     (message: MessageWithUser, previousId: string) => {
+      console.log({ message });
       setMessages((prev) => {
         let changedId = false;
 
@@ -129,24 +130,31 @@ function Chat() {
         );
       case 'authenticated':
         return (
-          <div className="flex-1 flex overflow-hidden">
-            <ChatUsers socket={socket} />
-            <div className="flex-1 h-full flex w-full overflow-hidden flex-col ">
-              <ChatContent messages={messages} />
-              <ChatForm socket={socket} onSubmit={handleSubmit} />
+          <>
+            <ChatHeader />
+            <div className="flex-1 flex overflow-hidden">
+              <ChatUsers socket={socket} />
+              <div className="flex-1 h-full flex w-full overflow-hidden flex-col ">
+                <ChatContent messages={messages} />
+                <ChatForm socket={socket} onSubmit={handleSubmit} />
+              </div>
             </div>
-          </div>
+          </>
         );
       case 'loading':
-        return <ChatSkeleton />;
+        return (
+          <>
+            <ChatHeader />
+            <ChatSkeleton />
+          </>
+        );
       default:
         return exhaustiveCheck(status);
     }
   }, [handleSubmit, messages, socket, status]);
 
   return (
-    <div className="h-[75vh] bg-white max-w-7xl w-full drop-shadow-lg shadow flex flex-col">
-      <ChatHeader />
+    <div className="bg-white w-full h-full drop-shadow-lg shadow flex flex-col">
       {content}
     </div>
   );

@@ -1,17 +1,17 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'next-i18next';
 import { useSession } from 'next-auth/react';
 import { io } from 'socket.io-client';
+import useSound from 'use-sound';
 import { ChatSocket, MessageWithUser } from '@/widgets/chat/types';
 import SignInButton from '@/features/sign-in-button';
 import { exhaustiveCheck } from '@/shared/lib';
+import { useNotifications } from '@/shared/hooks';
 import ChatContent from './ChatContent';
 import ChatHeader from './ChatHeader';
 import ChatForm from './ChatForm';
 import ChatUsers from './ChatUsers';
 import ChatSkeleton from './ChatSkeleton';
-import useSound from 'use-sound';
-import { useNotifications } from '@/shared/hooks';
-import { useTranslation } from 'react-i18next';
 
 function Chat() {
   const { t } = useTranslation(['common']);

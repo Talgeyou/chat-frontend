@@ -53,7 +53,6 @@ function Chat() {
 
   const newMessageListener = useCallback(
     (message: MessageWithUser, previousId: string) => {
-      console.log({ message });
       setMessages((prev) => {
         let changedId = false;
 
